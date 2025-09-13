@@ -1,173 +1,602 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>快合租 - 奈飞Netflix合租平台购买指南</title>
-    <meta name="description"
-        content="Netflix奈飞合租网站推荐，整理Netflix账号类型、合租价格、最新优惠等发车信息，提供Youtube、Spotify、Disney+等流媒体账号的解锁服务。">
-    <link href="https://gcore.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>快合租 - Netflix合租平台</title>
+    <meta name="description" content="Netflix奈飞合租网站推荐，整理Netflix账号类型、合租价格、最新优惠等发车信息">
+    <meta content="奈飞合租,账号合租,奈飞账号合租,奈飞合租平台,Netflix合租群" name="keywords">
+    <link href="https://fonts.loli.net/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #141414;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #e50914, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #e50914, #ff6b6b);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主要内容区域 */
+        .hero {
+            padding-top: 120px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-link {
+            color: #e50914;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .hero-link:hover {
+            color: #ff6b6b;
+            text-decoration: underline;
+        }
+
+        /* 卡片网格布局 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #e50914, #ff6b6b, #ff4757);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .card-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e50914;
+            margin-bottom: 20px;
+        }
+
+        .card-price small {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .card-features li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #e50914;
+            font-weight: bold;
+        }
+
+        .card-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #e50914, #ff4757);
+            border: none;
+            border-radius: 10px;
             color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
         }
-        header {
-            background-color: #e50914;
+
+        .card-button:hover {
+            background: linear-gradient(135deg, #ff4757, #ff6b6b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
         }
+
+        /* FAQ部分 */
+        .faq-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .faq-section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #ffffff;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-question {
+            padding: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #e50914;
+        }
+
+        .faq-answer {
+            padding: 0 25px 25px 25px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 页脚 */
         footer {
-            background-color: #e50914;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding-top: 100px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 30px;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(229, 9, 20, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(229, 9, 20, 0.8);
         }
     </style>
 </head>
-
 <body>
-
-    <header class="p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-bold">快合租</h1>
-            <nav class="space-x-4">
-                <a class="hover:text-gray-300" href="https://www.netflix.com/hk/">Netflix</a>
-                <a class="hover:text-gray-300" href="https://www.youtube.com/">Youtube</a>
-                <a class="hover:text-gray-300" href="https://www.disneyplus.com/">Disney+</a>
-                <a class="hover:text-gray-300" href="https://open.spotify.com/">Spotify</a>
-            </nav>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">快合租</div>
+            <ul class="nav-links">
+                <li><a href="https://www.netflix.com/hk/">Netflix</a></li>
+                <li><a href="https://www.youtube.com/">YouTube</a></li>
+                <li><a href="https://www.disneyplus.com/">Disney+</a></li>
+                <li><a href="https://www.spotify.com/">Spotify</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
-    <main class="container mx-auto p-6">
-        <section class="text-center mb-8">
-            <h2 class="text-4xl font-semibold">奈飞Netflix合租平台购买指南</h2>
-            <h4 class="text-3xl font-semibold">不知道看什么？点击 <a href="https://www.justwatch.com/hk" class="text-blue-400">这里</a></h4>
-            <p class="mt-2 text-lg">整理全网Netflix合租平台，分享流媒体在中国大陆的解锁教程，发现最精彩的网飞好剧，获取更低的奈飞价格!</p>
+    <main>
+        <section class="hero">
+            <h1>Netflix合租平台</h1>
+            <p>整理全网Netflix合租平台，分享流媒体在中国大陆的解锁教程<br>
+            发现最精彩的网飞好剧，获取更低的奈飞价格！<br>
+            不知道看什么？点击 <a href="https://www.justwatch.com/hk" class="hero-link">这里</a></p>
         </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-800 rounded-lg p-4">
-                <h3 class="text-xl font-bold">奈飞小铺</h3>
-                <p class="text-2xl">27.5软妹币<small class="text-gray-400">/月</small></p>
-                <ul class="mt-2">
+        <div class="cards-grid">
+            <div class="card">
+                <h3>奈飞小铺</h3>
+                <div class="card-price">27.5<small>软妹币/月</small></div>
+                <ul class="card-features">
                     <li>4K最高级套餐</li>
                     <li>独立车位可设pin码</li>
                     <li>使用不限地区</li>
                     <li>礼品卡续费中途不换号</li>
                 </ul>
-                <a href="https://ihezu.live/bGsEmz" class="mt-4 block bg-blue-600 text-center py-2 rounded">租它</a>
+                <a href="https://ihezu.live/bGsEmz" class="card-button">立即租用</a>
             </div>
-            <div class="bg-gray-800 rounded-lg p-4">
-                <h3 class="text-xl font-bold">银河录像局</h3>
-                <p class="text-2xl">29软妹币<small class="text-gray-400">/月</small></p>
-                <ul class="mt-2">
+
+            <div class="card">
+                <h3>银河录像局</h3>
+                <div class="card-price">29<small>软妹币/月</small></div>
+                <ul class="card-features">
                     <li>4K最高级套餐</li>
                     <li>单月起售</li>
                     <li>使用不限地区</li>
                     <li>独立子账户</li>
                 </ul>
-                <a href="https://nf.video/efgIG" class="mt-4 block bg-blue-600 text-center py-2 rounded">租它</a>
+                <a href="https://nf.video/efgIG" class="card-button">立即租用</a>
             </div>
-            <div class="bg-gray-800 rounded-lg p-4">
-                <h3 class="text-xl font-bold">蜜糖商店</h3>
-                <p class="text-2xl">30软妹币<small class="text-gray-400">/月</small></p>
-                <ul class="mt-2">
+
+            <div class="card">
+                <h3>蜜糖商店</h3>
+                <div class="card-price">30<small>软妹币/月</small></div>
+                <ul class="card-features">
                     <li>独立观影记录，4K高清</li>
                     <li>可长期续费不换号</li>
                     <li>使用不限地区</li>
                     <li>标准&全球账号可供选择</li>
                 </ul>
-                <a href="https://metshop.cn?referrerUserNo=" class="mt-4 block bg-blue-600 text-center py-2 rounded">租它</a>
+                <a href="https://metshop.cn?referrerUserNo=" class="card-button">立即租用</a>
             </div>
-            <div class="bg-gray-800 rounded-lg p-4">
-                <h3 class="text-xl font-bold">环球巴士</h3>
-                <p class="text-2xl">29.99软妹币<small class="text-gray-400">/月</small></p>
-                <ul class="mt-2">
+
+            <div class="card">
+                <h3>环球巴士</h3>
+                <div class="card-price">29.99<small>软妹币/月</small></div>
+                <ul class="card-features">
                     <li>4K最高级套餐</li>
                     <li>独立车位可设pin码</li>
                     <li>使用不限地区</li>
                     <li>单月起售</li>
                 </ul>
-                <a href="https://universalbus.cn/?s=B9ju9uQIIi" class="mt-4 block bg-blue-600 text-center py-2 rounded">租它</a>
+                <a href="https://universalbus.cn/?s=B9ju9uQIIi" class="card-button">立即租用</a>
             </div>
-            <div class="bg-gray-800 rounded-lg p-4">
-                <h3 class="text-xl font-bold">解锁节点</h3>
-                <p class="text-2xl">25软妹币<small class="text-gray-400">/月</small></p>
-                <ul class="mt-2">
+
+            <div class="card">
+                <h3>解锁节点</h3>
+                <div class="card-price">25<small>软妹币/月</small></div>
+                <ul class="card-features">
                     <li>流媒体全解锁</li>
                     <li>每月 150GB的流量</li>
                     <li>IEPL专线</li>
                     <li>峰值速率达300Mbps</li>
                 </ul>
-                <a href="https://st1.hosbb.com/#/register?code=4ksQSpv2" class="mt-4 block bg-blue-600 text-center py-2 rounded">租它</a>
+                <a href="https://st1.hosbb.com/#/register?code=4ksQSpv2" class="card-button">立即租用</a>
             </div>
         </div>
 
-        <section class="mt-8">
-            <h2 class="text-3xl font-semibold text-center">常见问题解答</h2>
-            <ul class="mt-4 space-y-4">
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">Netflix是什么?</summary>
-                        <p>Netflix是一家美国的流媒体服务公司，成立于1997年。它提供在线流媒体内容，包括电影、电视剧、纪录片、综艺节目等。用户可以通过互联网订阅Netflix的服务，并在各种设备上观看内容，如电视、电脑、智能手机和平板电脑等。Netflix以其丰富的内容库、自制剧和电影等独家内容而闻名，是全球最受欢迎的流媒体平台之一。</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">中国大陆如何观看 Netflix?</summary>
-                        <p>1.可以解锁Netflix的节点。</p>
-                        <p>2.订购/购买/合租 Netflix会员</p>
-                        <p>3.拥有适合观看的电子设备和网络</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">Netflix能不能白嫖？</summary>
-                        <p>2020年10月开始，Netflix停止在大多数国家提供免费试用的政策，以防止很多订户通过“连续注册会员免费试用30天”的方法薅羊毛。</p>
-                        <p>所以目前Netflix不提供免费试用，只能在支付订阅费用后使用，订阅后可随时在线更改套餐或取消。</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">Netflix如何收费?</summary>
-                        <p>Netflix是纯粹的订阅制模式，所以需要订阅会员才能正常观看，不像国内爱奇艺、优酷、腾讯视频等有免费视频可以看。至于Netflix月费是多少，可以根据个人的情况来购买相应的会员计划，也可以合租。</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">在哪里观看?</summary>
-                        <p>浏览器直接访问 netflix.com ，Windows 系统下使用浏览器观看有很多兼容性问题，Edge 和 Chrome 都是，建议从 Windows 商店下载 Netflix app 观看.</p>
-                        <p>也能使用iOS（非国区 Apple ID（港、台、美、日、等）在 App Store下载）、Android客户端（Google Play商店，APKPure / APKMirror）。</p>
-                        <p>智能电视 / 电视盒子 / 游戏主机,只有通过 Netflix 认证的设备，才能正常使用 Netflix，因此不建议自行安装或刷机，建议使用外置的电视盒子或游戏主机满足影音需求.</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">我的节点能不能看 Netflix？</summary>
-                        <p>Netflix 官方提供了一个页面来测试你的网络环境是否可以观看，不需要有账号</p>
-                        <p>https://www.netflix.com/hk/title/80018499</p>
-                        <p>如果提示“您似乎使用了解锁工具或代理”，则说明你使用的节点没有解锁 Netflix，请更换其他节点</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">为什么会提示使用人数限制？</summary>
-                        <p>合租账号所订阅的高级套餐，最多允许 4 台设备同时播放，每个账号为最大化资源利用率设有 5 个座位，因此是有一定概率碰到这种情况的</p>
-                    </details>
-                </li>
-                <li>
-                    <details class="bg-gray-800 p-4 rounded">
-                        <summary class="font-bold cursor-pointer">为什么找不到部分资源？</summary>
-                        <p>Netflix 上的资源大概分为两种：Netflix 自有版权的内容，一般称为自制剧，比如《怪奇物语》 Netflix 从外部授权的内容，一般称为非自制剧，比如《绝命毒师》自制剧通常全球可看，非自制剧则根据授权协议，只在部分地区可看</p>
-                        <p>https://flixpatrol.com/或https://flixwatch.co/上搜索想看的资源在哪个区域可看，并使用对应区域的节点</p>
-                    </details>
-                </li>
-            </ul>
+        <section class="faq-section">
+            <h2>常见问题解答</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    Netflix是什么?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Netflix是一家美国的流媒体服务公司，成立于1997年。它提供在线流媒体内容，包括电影、电视剧、纪录片、综艺节目等。用户可以通过互联网订阅Netflix的服务，并在各种设备上观看内容，如电视、电脑、智能手机和平板电脑等。Netflix以其丰富的内容库、自制剧和电影等独家内容而闻名，是全球最受欢迎的流媒体平台之一。
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    中国大陆如何观看 Netflix?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    1. 可以解锁Netflix的节点。<br>
+                    2. 订购/购买/合租 Netflix会员<br>
+                    3. 拥有适合观看的电子设备和网络
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    Netflix能不能白嫖？
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    2020年10月开始，Netflix停止在大多数国家提供免费试用的政策，以防止很多订户通过"连续注册会员免费试用30天"的方法薅羊毛。<br><br>
+                    所以目前Netflix不提供免费试用，只能在支付订阅费用后使用，订阅后可随时在线更改套餐或取消。
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    Netflix如何收费?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Netflix是纯粹的订阅制模式，所以需要订阅会员才能正常观看，不像国内爱奇艺、优酷、腾讯视频等有免费视频可以看。至于Netflix月费是多少，可以根据个人的情况来购买相应的会员计划，也可以合租。
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    在哪里观看?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    浏览器直接访问 netflix.com ，Windows 系统下使用浏览器观看有很多兼容性问题，Edge 和 Chrome 都是，建议从 Windows 商店下载 Netflix app 观看。<br><br>
+                    也能使用iOS（非国区 Apple ID（港、台、美、日、等）在 App Store下载）、Android客户端（Google Play商店，APKPure / APKMirror）。<br><br>
+                    智能电视 / 电视盒子 / 游戏主机,只有通过 Netflix 认证的设备，才能正常使用 Netflix，因此不建议自行安装或刷机，建议使用外置的电视盒子或游戏主机满足影音需求。
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    我的节点能不能看 Netflix？
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Netflix 官方提供了一个页面来测试你的网络环境是否可以观看，不需要有账号<br><br>
+                    https://www.netflix.com/hk/title/80018499<br><br>
+                    如果提示"您似乎使用了解锁工具或代理"，则说明你使用的节点没有解锁 Netflix，请更换其他节点
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    为什么会提示使用人数限制？
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    合租账号所订阅的高级套餐，最多允许 4 台设备同时播放，每个账号为最大化资源利用率设有 5 个座位，因此是有一定概率碰到这种情况的
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    为什么找不到部分资源？
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Netflix 上的资源大概分为两种：Netflix 自有版权的内容，一般称为自制剧，比如《怪奇物语》 Netflix 从外部授权的内容，一般称为非自制剧，比如《绝命毒师》自制剧通常全球可看，非自制剧则根据授权协议，只在部分地区可看<br><br>
+                    https://flixpatrol.com/或https://flixwatch.co/上搜索想看的资源在哪个区域可看，并使用对应区域的节点
+                </div>
+            </div>
         </section>
     </main>
 
-    <footer class="text-center py-4">
-        <small>&copy; 欢哥科技</small>
+    <footer>
+        <small>&copy; 2025 快合租. All rights reserved.</small>
     </footer>
 
-</body>
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
 
+        // FAQ切换功能
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const plus = element.querySelector('span');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                plus.textContent = '+';
+                plus.style.transform = 'rotate(0deg)';
+            } else {
+                // 关闭其他打开的FAQ
+                document.querySelectorAll('.faq-answer.show').forEach(item => {
+                    item.classList.remove('show');
+                    item.previousElementSibling.querySelector('span').textContent = '+';
+                    item.previousElementSibling.querySelector('span').style.transform = 'rotate(0deg)';
+                });
+                
+                answer.classList.add('show');
+                plus.textContent = '−';
+                plus.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // 卡片动画延迟
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
 </html>
