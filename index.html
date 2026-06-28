@@ -1,552 +1,324 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>快合租 - Netflix合租平台</title>
     <meta name="description" content="Netflix奈飞合租网站推荐，整理Netflix账号类型、合租价格、最新优惠等发车信息">
     <meta content="奈飞合租,账号合租,奈飞账号合租,奈飞合租平台,Netflix合租群" name="keywords">
-    <link href="https://fonts.loli.net/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        netflix: {
+                            red: '#e50914',
+                            'red-hover': '#ff4757',
+                            dark: '#0a0a0a',
+                            'dark-light': '#1a1a1a',
+                        }
+                    },
+                    fontFamily: {
+                        sf: ['SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 0.5s ease forwards',
+                        'slide-down': 'slideDown 0.3s ease forwards',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { opacity: '0', maxHeight: '0' },
+                            '100%': { opacity: '1', maxHeight: '500px' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(229, 9, 20, 0.3)' },
+                            '50%': { boxShadow: '0 0 40px rgba(229, 9, 20, 0.6)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400;
+            }
+            .text-gradient-red {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-netflix-red to-netflix-red-hover;
+            }
+            .glass {
+                @apply bg-white/5 backdrop-blur-xl border border-white/10;
+            }
+            .glass-hover {
+                @apply hover:bg-white/10 hover:border-white/20;
+            }
+            .card-hover {
+                @apply hover:-translate-y-2 hover:shadow-2xl hover:shadow-netflix-red/20 transition-all duration-500;
+            }
+            .nav-link {
+                @apply relative text-white/80 hover:text-white transition-all duration-300 hover:-translate-y-0.5;
+            }
+            .nav-link::after {
+                content: '';
+                @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-netflix-red to-netflix-red-hover transition-all duration-300;
+            }
+            .nav-link:hover::after {
+                @apply w-full;
+            }
+            .faq-answer {
+                @apply max-h-0 overflow-hidden transition-all duration-500 ease-in-out;
+            }
+            .faq-answer.open {
+                @apply max-h-96;
+            }
+        }
+    </style>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #ffffff;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* 导航栏样式 */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 600;
-            background: linear-gradient(45deg, #e50914, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-weight: 400;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(45deg, #e50914, #ff6b6b);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* 主要内容区域 */
-        .hero {
-            padding-top: 120px;
-            text-align: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-bottom: 80px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 40px;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .hero-link {
-            color: #e50914;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .hero-link:hover {
-            color: #ff6b6b;
-            text-decoration: underline;
-        }
-
-        /* 卡片网格布局 */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #e50914, #ff6b6b, #ff4757);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2);
-        }
-
-        .card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #ffffff;
-        }
-
-        .card-price {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #e50914;
-            margin-bottom: 20px;
-        }
-
-        .card-price small {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 400;
-        }
-
-        .card-features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .card-features li {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .card-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #e50914;
-            font-weight: bold;
-        }
-
-        .card-button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #e50914, #ff4757);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-        }
-
-        .card-button:hover {
-            background: linear-gradient(135deg, #ff4757, #ff6b6b);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
-        }
-
-        /* FAQ部分 */
-        .faq-section {
-            max-width: 1200px;
-            margin: 80px auto;
-            padding: 0 20px;
-        }
-
-        .faq-section h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #ffffff;
-        }
-
-        .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .faq-question {
-            padding: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .faq-question:hover {
-            color: #e50914;
-        }
-
-        .faq-answer {
-            padding: 0 25px 25px 25px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.8;
-            display: none;
-        }
-
-        .faq-answer.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* 页脚 */
-        footer {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* 动画 */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero {
-                padding-top: 100px;
-            }
-            
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .card {
-                padding: 30px;
-            }
-        }
-
-        /* 滚动条样式 */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
         }
-
         ::-webkit-scrollbar-thumb {
             background: rgba(229, 9, 20, 0.5);
             border-radius: 4px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(229, 9, 20, 0.8);
         }
     </style>
 </head>
-<body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">快合租</div>
-            <ul class="nav-links">
-                <li><a href="https://www.netflix.com/hk/">Netflix</a></li>
-                <li><a href="https://www.youtube.com/">YouTube</a></li>
-                <li><a href="https://www.disneyplus.com/">Disney+</a></li>
-                <li><a href="https://www.spotify.com/">Spotify</a></li>
+<body class="font-sf bg-gradient-to-br from-netflix-dark to-netflix-dark-light text-white overflow-x-hidden leading-relaxed">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full bg-black/80 backdrop-blur-xl border-b border-white/10 z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-5 flex justify-between items-center h-[70px]">
+            <div class="text-2xl font-semibold text-gradient-red">快合租</div>
+            <ul class="flex gap-8 list-none max-md:hidden">
+                <li><a href="https://www.netflix.com/hk/" class="nav-link">Netflix</a></li>
+                <li><a href="https://www.youtube.com/" class="nav-link">YouTube</a></li>
+                <li><a href="https://www.disneyplus.com/" class="nav-link">Disney+</a></li>
+                <li><a href="https://www.spotify.com/" class="nav-link">Spotify</a></li>
             </ul>
         </div>
     </nav>
 
     <main>
-        <section class="hero">
-            <h1>Netflix合租平台</h1>
-            <p>整理全网Netflix合租平台，分享流媒体在中国大陆的解锁教程<br>
-            发现最精彩的网飞好剧，获取更低的奈飞价格！<br>
-            不知道看什么？点击 <a href="https://www.justwatch.com/hk" class="hero-link">这里</a></p>
+        <!-- Hero区域 -->
+        <section class="pt-32 pb-20 text-center max-w-7xl mx-auto px-5 max-md:pt-24">
+            <h1 class="text-5xl md:text-7xl font-bold mb-5 text-gradient animate-fade-in-up">Netflix合租平台</h1>
+            <p class="text-xl text-white/70 mb-10 animate-fade-in-up" style="animation-delay: 0.2s">
+                整理全网Netflix合租平台，分享流媒体在中国大陆的解锁教程<br>
+                发现最精彩的网飞好剧，获取更低的奈飞价格！<br>
+                不知道看什么？点击 <a href="https://www.justwatch.com/hk" class="text-netflix-red hover:text-netflix-red-hover font-medium transition-colors duration-300 underline underline-offset-4">这里</a>
+            </p>
         </section>
 
-        <div class="cards-grid">
-            <div class="card">
-                <h3>奈飞小铺</h3>
-                <div class="card-price">27.5<small>软妹币/月</small></div>
-                <ul class="card-features">
-                    <li>4K最高级套餐</li>
-                    <li>独立车位可设pin码</li>
-                    <li>使用不限地区</li>
-                    <li>礼品卡续费中途不换号</li>
+        <!-- 卡片网格 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-5 pb-20">
+            <!-- 卡片1 -->
+            <div class="glass rounded-2xl p-10 relative overflow-hidden card-hover animate-fade-in-up" style="animation-delay: 0.1s">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-netflix-red via-netflix-red-hover to-red-500 transform scale-x-0 transition-transform duration-500 hover:scale-x-100 origin-left"></div>
+                <h3 class="text-2xl font-semibold mb-4">奈飞小铺</h3>
+                <div class="text-4xl font-bold text-netflix-red mb-5">15.6<span class="text-base text-white/50 font-normal ml-1">软妹币/月</span></div>
+                <ul class="mb-8 space-y-2">
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">中文字幕</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">可设pin码</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">4K高清</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">现号秒发</li>
                 </ul>
-                <a href="https://ihezu.live/bGsEmz" class="card-button">立即租用</a>
+                <a href="https://ihezu.world/bGsEmz" class="block w-full py-4 bg-gradient-to-r from-netflix-red to-netflix-red-hover rounded-xl text-white font-semibold text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-netflix-red/30">立即租用</a>
             </div>
 
-            <div class="card">
-                <h3>银河录像局</h3>
-                <div class="card-price">29<small>软妹币/月</small></div>
-                <ul class="card-features">
-                    <li>4K最高级套餐</li>
-                    <li>单月起售</li>
-                    <li>使用不限地区</li>
-                    <li>独立子账户</li>
+            <!-- 卡片2 -->
+            <div class="glass rounded-2xl p-10 relative overflow-hidden card-hover animate-fade-in-up" style="animation-delay: 0.2s">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-netflix-red via-netflix-red-hover to-red-500 transform scale-x-0 transition-transform duration-500 hover:scale-x-100 origin-left"></div>
+                <h3 class="text-2xl font-semibold mb-4">银河录像局</h3>
+                <div class="text-4xl font-bold text-netflix-red mb-5">99<span class="text-base text-white/50 font-normal ml-1">软妹币/3月</span></div>
+                <ul class="mb-8 space-y-2">
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">全球解锁</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">支持中文</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">4K高清</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">独立子账号</li>
                 </ul>
-                <a href="https://nf.video/efgIG" class="card-button">立即租用</a>
+                <a href="https://nf.video/efgIG" class="block w-full py-4 bg-gradient-to-r from-netflix-red to-netflix-red-hover rounded-xl text-white font-semibold text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-netflix-red/30">立即租用</a>
             </div>
 
-            <div class="card">
-                <h3>蜜糖商店</h3>
-                <div class="card-price">30<small>软妹币/月</small></div>
-                <ul class="card-features">
-                    <li>独立观影记录，4K高清</li>
-                    <li>可长期续费不换号</li>
-                    <li>使用不限地区</li>
-                    <li>标准&全球账号可供选择</li>
+            <!-- 卡片3 -->
+            <div class="glass rounded-2xl p-10 relative overflow-hidden card-hover animate-fade-in-up" style="animation-delay: 0.3s">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-netflix-red via-netflix-red-hover to-red-500 transform scale-x-0 transition-transform duration-500 hover:scale-x-100 origin-left"></div>
+                <h3 class="text-2xl font-semibold mb-4">易奈飞</h3>
+                <div class="text-4xl font-bold text-netflix-red mb-5">2<span class="text-base text-white/50 font-normal ml-1">软妹币/月</span></div>
+                <ul class="mb-8 space-y-2">
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">全球解锁</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">支持中文</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">4K高清</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">独立子账号</li>
                 </ul>
-                <a href="https://metshop.cn?referrerUserNo=" class="card-button">立即租用</a>
+                <a href="https://1nf.net/shop?ref=LYA8WJ" class="block w-full py-4 bg-gradient-to-r from-netflix-red to-netflix-red-hover rounded-xl text-white font-semibold text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-netflix-red/30">立即租用</a>
             </div>
 
-            <div class="card">
-                <h3>环球巴士</h3>
-                <div class="card-price">29.99<small>软妹币/月</small></div>
-                <ul class="card-features">
-                    <li>4K最高级套餐</li>
-                    <li>独立车位可设pin码</li>
-                    <li>使用不限地区</li>
-                    <li>单月起售</li>
+            <!-- 卡片4 -->
+            <div class="glass rounded-2xl p-10 relative overflow-hidden card-hover animate-fade-in-up" style="animation-delay: 0.4s">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-netflix-red via-netflix-red-hover to-red-500 transform scale-x-0 transition-transform duration-500 hover:scale-x-100 origin-left"></div>
+                <h3 class="text-2xl font-semibold mb-4">环球巴士</h3>
+                <div class="text-4xl font-bold text-netflix-red mb-5">29.99<span class="text-base text-white/50 font-normal ml-1">软妹币/月</span></div>
+                <ul class="mb-8 space-y-2">
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">中文字幕</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">可设pin码</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">4K高清</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">现号秒发</li>
                 </ul>
-                <a href="https://universalbus.cn/?s=B9ju9uQIIi" class="card-button">立即租用</a>
+                <a href="https://universalbus.cn/?s=B9ju9uQIIi" class="block w-full py-4 bg-gradient-to-r from-netflix-red to-netflix-red-hover rounded-xl text-white font-semibold text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-netflix-red/30">立即租用</a>
             </div>
 
-            <div class="card">
-                <h3>解锁节点</h3>
-                <div class="card-price">25<small>软妹币/月</small></div>
-                <ul class="card-features">
-                    <li>流媒体全解锁</li>
-                    <li>每月 150GB的流量</li>
-                    <li>IEPL专线</li>
-                    <li>峰值速率达300Mbps</li>
+            <!-- 卡片5 -->
+            <div class="glass rounded-2xl p-10 relative overflow-hidden card-hover animate-fade-in-up" style="animation-delay: 0.5s">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-netflix-red via-netflix-red-hover to-red-500 transform scale-x-0 transition-transform duration-500 hover:scale-x-100 origin-left"></div>
+                <h3 class="text-2xl font-semibold mb-4">解锁节点</h3>
+                <div class="text-4xl font-bold text-netflix-red mb-5">25<span class="text-base text-white/50 font-normal ml-1">软妹币/月</span></div>
+                <ul class="mb-8 space-y-2">
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">流媒体全解锁</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">每月 150GB的流量</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">IEPL专线</li>
+                    <li class="text-white/80 pl-5 relative before:content-['✓'] before:absolute before:left-0 before:text-netflix-red before:font-bold">峰值速率达300Mbps</li>
                 </ul>
-                <a href="https://st2.hosbb.com/#/register?code=4ksQSpv2" class="card-button">立即租用</a>
+                <a href="https://st2.hosbb.com/#/register?code=4ksQSpv2" class="block w-full py-4 bg-gradient-to-r from-netflix-red to-netflix-red-hover rounded-xl text-white font-semibold text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-netflix-red/30">立即租用</a>
             </div>
         </div>
 
-        <section class="faq-section">
-            <h2>常见问题解答</h2>
+        <!-- FAQ部分 -->
+        <section class="max-w-4xl mx-auto px-5 pb-20">
+            <h2 class="text-4xl md:text-5xl font-semibold text-center mb-12">常见问题解答</h2>
             
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    Netflix是什么?
-                    <span>+</span>
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        Netflix是什么?
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        Netflix是一家美国的流媒体服务公司，成立于1997年。它提供在线流媒体内容，包括电影、电视剧、纪录片、综艺节目等。用户可以通过互联网订阅Netflix的服务，并在各种设备上观看内容，如电视、电脑、智能手机和平板电脑等。Netflix以其丰富的内容库、自制剧和电影等独家内容而闻名，是全球最受欢迎的流媒体平台之一。
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    Netflix是一家美国的流媒体服务公司，成立于1997年。它提供在线流媒体内容，包括电影、电视剧、纪录片、综艺节目等。用户可以通过互联网订阅Netflix的服务，并在各种设备上观看内容，如电视、电脑、智能手机和平板电脑等。Netflix以其丰富的内容库、自制剧和电影等独家内容而闻名，是全球最受欢迎的流媒体平台之一。
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    中国大陆如何观看 Netflix?
-                    <span>+</span>
+                <!-- FAQ 2 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        中国大陆如何观看 Netflix?
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        1. 可以解锁Netflix的节点。<br>
+                        2. 订购/购买/合租 Netflix会员<br>
+                        3. 拥有适合观看的电子设备和网络
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    1. 可以解锁Netflix的节点。<br>
-                    2. 订购/购买/合租 Netflix会员<br>
-                    3. 拥有适合观看的电子设备和网络
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    Netflix能不能白嫖？
-                    <span>+</span>
+                <!-- FAQ 3 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        Netflix能不能白嫖？
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        2020年10月开始，Netflix停止在大多数国家提供免费试用的政策，以防止很多订户通过"连续注册会员免费试用30天"的方法薅羊毛。<br><br>
+                        所以目前Netflix不提供免费试用，只能在支付订阅费用后使用，订阅后可随时在线更改套餐或取消。
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    2020年10月开始，Netflix停止在大多数国家提供免费试用的政策，以防止很多订户通过"连续注册会员免费试用30天"的方法薅羊毛。<br><br>
-                    所以目前Netflix不提供免费试用，只能在支付订阅费用后使用，订阅后可随时在线更改套餐或取消。
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    Netflix如何收费?
-                    <span>+</span>
+                <!-- FAQ 4 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        Netflix如何收费?
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        Netflix是纯粹的订阅制模式，所以需要订阅会员才能正常观看，不像国内爱奇艺、优酷、腾讯视频等有免费视频可以看。至于Netflix月费是多少，可以根据个人的情况来购买相应的会员计划，也可以合租。
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    Netflix是纯粹的订阅制模式，所以需要订阅会员才能正常观看，不像国内爱奇艺、优酷、腾讯视频等有免费视频可以看。至于Netflix月费是多少，可以根据个人的情况来购买相应的会员计划，也可以合租。
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    在哪里观看?
-                    <span>+</span>
+                <!-- FAQ 5 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        在哪里观看?
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        浏览器直接访问 netflix.com ，Windows 系统下使用浏览器观看有很多兼容性问题，Edge 和 Chrome 都是，建议从 Windows 商店下载 Netflix app 观看。<br><br>
+                        也能使用iOS（非国区 Apple ID（港、台、美、日、等）在 App Store下载）、Android客户端（Google Play商店，APKPure / APKMirror）。<br><br>
+                        智能电视 / 电视盒子 / 游戏主机,只有通过 Netflix 认证的设备，才能正常使用 Netflix，因此不建议自行安装或刷机，建议使用外置的电视盒子或游戏主机满足影音需求。
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    浏览器直接访问 netflix.com ，Windows 系统下使用浏览器观看有很多兼容性问题，Edge 和 Chrome 都是，建议从 Windows 商店下载 Netflix app 观看。<br><br>
-                    也能使用iOS（非国区 Apple ID（港、台、美、日、等）在 App Store下载）、Android客户端（Google Play商店，APKPure / APKMirror）。<br><br>
-                    智能电视 / 电视盒子 / 游戏主机,只有通过 Netflix 认证的设备，才能正常使用 Netflix，因此不建议自行安装或刷机，建议使用外置的电视盒子或游戏主机满足影音需求。
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    我的节点能不能看 Netflix？
-                    <span>+</span>
+                <!-- FAQ 6 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        我的节点能不能看 Netflix？
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        Netflix 官方提供了一个页面来测试你的网络环境是否可以观看，不需要有账号<br><br>
+                        https://www.netflix.com/hk/title/80018499<br><br>
+                        如果提示"您似乎使用了解锁工具或代理"，则说明你使用的节点没有解锁 Netflix，请更换其他节点
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    Netflix 官方提供了一个页面来测试你的网络环境是否可以观看，不需要有账号<br><br>
-                    https://www.netflix.com/hk/title/80018499<br><br>
-                    如果提示"您似乎使用了解锁工具或代理"，则说明你使用的节点没有解锁 Netflix，请更换其他节点
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    为什么会提示使用人数限制？
-                    <span>+</span>
+                <!-- FAQ 7 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        为什么会提示使用人数限制？
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        合租账号所订阅的高级套餐，最多允许 4 台设备同时播放，每个账号为最大化资源利用率设有 5 个座位，因此是有一定概率碰到这种情况的
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    合租账号所订阅的高级套餐，最多允许 4 台设备同时播放，每个账号为最大化资源利用率设有 5 个座位，因此是有一定概率碰到这种情况的
-                </div>
-            </div>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    为什么找不到部分资源？
-                    <span>+</span>
-                </div>
-                <div class="faq-answer">
-                    Netflix 上的资源大概分为两种：Netflix 自有版权的内容，一般称为自制剧，比如《怪奇物语》 Netflix 从外部授权的内容，一般称为非自制剧，比如《绝命毒师》自制剧通常全球可看，非自制剧则根据授权协议，只在部分地区可看<br><br>
-                    https://flixpatrol.com/或https://flixwatch.co/上搜索想看的资源在哪个区域可看，并使用对应区域的节点
+                <!-- FAQ 8 -->
+                <div class="glass rounded-2xl overflow-hidden transition-all duration-300 glass-hover">
+                    <div class="faq-question p-6 cursor-pointer font-semibold text-lg flex justify-between items-center" onclick="toggleFAQ(this)">
+                        为什么找不到部分资源？
+                        <span class="transition-transform duration-300">+</span>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 text-white/70 leading-loose">
+                        Netflix 上的资源大概分为两种：Netflix 自有版权的内容，一般称为自制剧，比如《怪奇物语》 Netflix 从外部授权的内容，一般称为非自制剧，比如《绝命毒师》自制剧通常全球可看，非自制剧则根据授权协议，只在部分地区可看<br><br>
+                        https://flixpatrol.com/或https://flixwatch.co/上搜索想看的资源在哪个区域可看，并使用对应区域的节点
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <small>&copy; 2025 快合租. All rights reserved.</small>
+    <!-- 页脚 -->
+    <footer class="bg-black/80 backdrop-blur-xl text-center py-10 border-t border-white/10">
+        <small class="text-white/60">&copy; 2026 快合租. All rights reserved.</small>
     </footer>
 
     <script>
         // 导航栏滚动效果
         window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
+            const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                nav.style.background = 'rgba(0, 0, 0, 0.9)';
+                nav.style.background = 'rgba(0, 0, 0, 0.95)';
             } else {
                 nav.style.background = 'rgba(0, 0, 0, 0.8)';
             }
@@ -556,33 +328,28 @@
         function toggleFAQ(element) {
             const answer = element.nextElementSibling;
             const plus = element.querySelector('span');
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            const allPlus = document.querySelectorAll('.faq-question span');
             
-            if (answer.classList.contains('show')) {
-                answer.classList.remove('show');
+            if (answer.classList.contains('open')) {
+                answer.classList.remove('open');
                 plus.textContent = '+';
                 plus.style.transform = 'rotate(0deg)';
             } else {
                 // 关闭其他打开的FAQ
-                document.querySelectorAll('.faq-answer.show').forEach(item => {
-                    item.classList.remove('show');
-                    item.previousElementSibling.querySelector('span').textContent = '+';
-                    item.previousElementSibling.querySelector('span').style.transform = 'rotate(0deg)';
+                allAnswers.forEach(item => {
+                    item.classList.remove('open');
+                });
+                allPlus.forEach(item => {
+                    item.textContent = '+';
+                    item.style.transform = 'rotate(0deg)';
                 });
                 
-                answer.classList.add('show');
+                answer.classList.add('open');
                 plus.textContent = '−';
                 plus.style.transform = 'rotate(180deg)';
             }
         }
-
-        // 卡片动画延迟
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
-            });
-        });
 
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
